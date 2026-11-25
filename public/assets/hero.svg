@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0%" stop-color="#0b132b"/>
+      <stop offset="45%" stop-color="#1c2b59"/>
+      <stop offset="82%" stop-color="#2f6bff" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#0a0e1a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="62%" r="55%">
+      <stop offset="0%" stop-color="#6ca0ff" stop-opacity="0.55"/>
+      <stop offset="50%" stop-color="#2f6bff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#0a0e1a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ridge1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#263868"/>
+      <stop offset="100%" stop-color="#0d1428"/>
+    </linearGradient>
+    <linearGradient id="ridge2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#141e3c"/>
+      <stop offset="100%" stop-color="#070a14"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <rect width="1600" height="900" fill="url(#glow)"/>
+  <g stroke="#ffffff" stroke-opacity="0.06" stroke-width="1">
+    <line x1="0" y1="225" x2="1600" y2="225"/>
+    <line x1="0" y1="450" x2="1600" y2="450"/>
+    <line x1="0" y1="675" x2="1600" y2="675"/>
+    <line x1="400" y1="0" x2="400" y2="900"/>
+    <line x1="800" y1="0" x2="800" y2="900"/>
+    <line x1="1200" y1="0" x2="1200" y2="900"/>
+  </g>
+  <circle cx="800" cy="540" r="310" fill="none" stroke="#9ec0ff" stroke-opacity="0.14" stroke-width="1.5"/>
+  <circle cx="800" cy="540" r="460" fill="none" stroke="#9ec0ff" stroke-opacity="0.08" stroke-width="1"/>
+  <path d="M0 680 L280 510 L520 610 L820 420 L1110 580 L1380 470 L1600 590 L1600 900 L0 900 Z" fill="url(#ridge1)" opacity="0.88"/>
+  <path d="M0 760 L340 620 L650 710 L980 560 L1290 690 L1600 610 L1600 900 L0 900 Z" fill="url(#ridge2)"/>
+</svg>
