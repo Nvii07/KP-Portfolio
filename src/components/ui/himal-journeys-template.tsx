@@ -287,7 +287,26 @@ const CSS =
   "@media (prefers-reduced-motion:reduce){" +
   ".hj-root *,.hj-root *::before,.hj-root *::after{animation-duration:1ms!important;animation-delay:0ms!important;transition-duration:1ms!important;transition-delay:0ms!important}" +
   ".hj-root [data-rv]{transform:none;filter:none}" +
-  "}"
+  "}" +
+  // splash screen (color-matched to portfolio --dark #0e1422 & --blue #2f6bff)
+  ".hj-splash{position:fixed;inset:0;z-index:9999;background:var(--dark);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:transform .95s cubic-bezier(.76,0,.24,1),opacity .8s ease}" +
+  ".hj-splash[data-hide]{transform:translateY(-100%);pointer-events:none}" +
+  ".hj-splash-glow{position:absolute;width:380px;height:380px;background:radial-gradient(circle,rgba(47,107,255,.24) 0%,rgba(47,107,255,0) 70%);border-radius:50%;pointer-events:none;opacity:0;animation:kpa-glow 2.4s ease forwards}" +
+  ".hj-splash-wrap{position:relative;width:min(340px,72vw);overflow:visible}" +
+  ".hj-kpa{width:100%;height:auto;display:block;overflow:visible}" +
+  ".hj-kpa-p{fill:#fff;opacity:0;will-change:transform,opacity}" +
+  ".hj-kpa-chevron{transform:translateX(28px);animation:kpa-slide .85s cubic-bezier(.16,1,.3,1) .15s forwards}" +
+  ".hj-kpa-pillar{transform:translateY(36px);animation:kpa-slide .85s cubic-bezier(.16,1,.3,1) .3s forwards}" +
+  ".hj-kpa-bowl{transform:translateX(-28px);animation:kpa-slide .85s cubic-bezier(.16,1,.3,1) .45s forwards}" +
+  ".hj-kpa-dot{fill:var(--blue);transform-origin:515px 258px;transform:scale(.35);animation:kpa-pop .8s cubic-bezier(.34,1.56,.64,1) .6s forwards}" +
+  ".hj-kpa-slash{transform:translate(-18px,-34px);animation:kpa-slide .85s cubic-bezier(.16,1,.3,1) .72s forwards}" +
+  ".hj-splash-track{width:120px;height:2px;background:rgba(255,255,255,.14);margin-top:36px;border-radius:2px;overflow:hidden;opacity:0;animation:kpa-fade .5s ease .4s forwards}" +
+  ".hj-splash-fill{width:100%;height:100%;background:linear-gradient(90deg,var(--blue),#fff);transform:scaleX(0);transform-origin:left center;animation:kpa-bar 1.7s cubic-bezier(.76,0,.24,1) .4s forwards}" +
+  "@keyframes kpa-slide{to{opacity:1;transform:translate(0,0)}}" +
+  "@keyframes kpa-pop{to{opacity:1;transform:scale(1)}}" +
+  "@keyframes kpa-fade{to{opacity:1}}" +
+  "@keyframes kpa-bar{to{transform:scaleX(1)}}" +
+  "@keyframes kpa-glow{0%{opacity:0;transform:scale(.8)}50%{opacity:1;transform:scale(1)}100%{opacity:.75;transform:scale(1.05)}}"
 
 const Arrow = ({ dir = 1 }: { dir?: number }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" style={dir < 0 ? { transform: "scaleX(-1)" } : undefined}>
@@ -861,9 +880,25 @@ export default function HimalJourneysTemplate({ height = "100svh", email = MAIL,
   const [sheet, setSheet] = useState(null as null | { i: number; from: SheetRect })
   const [filter, setFilter] = useState<"All" | WorkCategory>("All")
   const [lightbox, setLightbox] = useState<WorkItem | null>(null)
+  const [splashHide, setSplashHide] = useState(false)
+  const [splashDone, setSplashDone] = useState(false)
   const cardEls = useRef([] as (HTMLElement | null)[])
   const categories: ("All" | WorkCategory)[] = ["All", "Sports Design", "JSW & BFC", "AI & Motion", "Print & Outdoor", "Logos & Identity"]
   const filteredWorks = filter === "All" ? WORKS : WORKS.filter((w) => w.category === filter)
+
+  useEffect(() => {
+    if (reduced) {
+      setSplashHide(true)
+      setSplashDone(true)
+      return
+    }
+    const t1 = window.setTimeout(() => setSplashHide(true), 2300)
+    const t2 = window.setTimeout(() => setSplashDone(true), 3300)
+    return () => {
+      window.clearTimeout(t1)
+      window.clearTimeout(t2)
+    }
+  }, [reduced])
 
   useEffect(() => {
     if (!lightbox) return
@@ -965,6 +1000,23 @@ export default function HimalJourneysTemplate({ height = "100svh", email = MAIL,
   return (
     <div ref={root} className={"hj-root" + (className ? " " + className : "")} style={style}>
       <style>{CSS}</style>
+      {!splashDone && (
+        <div className="hj-splash" data-hide={splashHide ? "" : undefined} aria-label="Loading screen" aria-hidden={splashHide}>
+          <div className="hj-splash-glow" />
+          <div className="hj-splash-wrap">
+            <svg className="hj-kpa" viewBox="0 0 740 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KPA Logo">
+              <polygon className="hj-kpa-p hj-kpa-chevron" points="115,35 190,35 110,180 190,325 115,325 35,180" />
+              <rect className="hj-kpa-p hj-kpa-pillar" x="230" y="35" width="72" height="290" />
+              <path className="hj-kpa-p hj-kpa-bowl" d="M 326,35 C 406,35 450,76 450,130 C 450,184 406,225 326,225 Z" />
+              <circle className="hj-kpa-p hj-kpa-dot" cx="515" cy="258" r="67" />
+              <polygon className="hj-kpa-p hj-kpa-slash" points="515,35 588,35 712,325 639,325" />
+            </svg>
+          </div>
+          <div className="hj-splash-track">
+            <div className="hj-splash-fill" />
+          </div>
+        </div>
+      )}
       <Nav brand={brand} active={active} compact={compact} reduced={reduced} email={email} onGo={goSection} />
 
       <section className="hj-hero" data-spy="home" id="hj-home" style={{ height }}>
